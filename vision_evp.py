@@ -5,17 +5,17 @@ class DensoController:
     def __init__(self, ip_address="172.20.10.2", port=5007):
         self.ip = ip_address
         self.port = port
-        # Inizializza il client: l'apertura del socket avviene automaticamente qui (timeout 2000 ms)[cite: 1]
+        # Inizializza il client: l'apertura del socket avviene automaticamente qui (timeout 2000 ms)
         self.bcap = BCAPClient(self.ip, self.port, 2000) 
         self.h_ctrl = 0
         self.h_rob = 0
 
     def connect(self):
-        # Connessione al controller virtuale o reale[cite: 1]
+        # Connessione al controller virtuale o reale
         self.h_ctrl = self.bcap.controller_connect("", "CaoProv.DENSO.VRC", self.ip, "")
         self.h_rob = self.bcap.controller_getrobot(self.h_ctrl, "Arm", "")
         
-        # Acquisizione permessi e accensione motori usando i metodi snake_case[cite: 1]
+        # Acquisizione permessi e accensione motori usando i metodi snake_case
         self.bcap.robot_execute(self.h_rob, "TakeArm", [0, 1])
         self.bcap.robot_execute(self.h_rob, "Motor", [1, 0])
         print("Motori attivati. Braccio pronto.")
@@ -31,13 +31,13 @@ class DensoController:
         # Coordinate fittizie (es. un blocco sul tavolo a X=250, Y=100, Z=50)
         mock_coords = [250.0, 100.0, 50.0, 180.0, 0.0, 180.0, 5]
         
-        # 1. Recupero handle della variabile di posizione (es. P1) dal controller[cite: 1]
+        # 1. Recupero handle della variabile di posizione (es. P1) dal controller
         h_pos_var = self.bcap.controller_getvariable(self.h_ctrl, target_variable, "")
         
-        # 2. Scrittura delle coordinate fittizie dentro P1[cite: 1]
+        # 2. Scrittura delle coordinate fittizie dentro P1
         self.bcap.variable_putvalue(h_pos_var, mock_coords)
         
-        # 3. Rilascio sicuro dell'oggetto variabile in memoria[cite: 1]
+        # 3. Rilascio sicuro dell'oggetto variabile in memoria
         self.bcap.variable_release(h_pos_var)
         
         print(f"Coordinate scritte con successo in {target_variable}: {mock_coords}")
@@ -55,7 +55,7 @@ class DensoController:
         time.sleep(1) 
 
     def disconnect(self):
-        # Rilascio risorse con sintassi Pythonic della libreria[cite: 1]
+        # Rilascio risorse con sintassi Pythonic della libreria
         if self.h_rob:
             self.bcap.robot_execute(self.h_rob, "Motor", [0, 0])
             self.bcap.robot_execute(self.h_rob, "GiveArm", "")
@@ -64,7 +64,7 @@ class DensoController:
             self.bcap.controller_disconnect(self.h_ctrl)
             
         # Niente self.bcap.bCap_Close() perché il socket viene 
-        # disconnesso nel __del__ nativo dell'oggetto BCAPClient[cite: 1].
+        # disconnesso nel __del__ nativo dell'oggetto BCAPClient.
         print("Disconnesso in sicurezza dal controller DENSO.")
 
 # ==========================================
