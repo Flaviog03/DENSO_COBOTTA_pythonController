@@ -1,7 +1,3 @@
-Ecco la documentazione tecnica dettagliata per i moduli **`variant.py`**, **`orinexception.py`** e **`bcapclient.py`**, con tutte le funzioni del client raggruppate per area funzionale.
-
----
-
 # 1. Modulo `variant.py`
 
 Il modulo definisce la classe **`VarType`**, che raggruppa le costanti numeriche usate dal protocollo b-CAP/ORiN per rappresentare i tipi di dato variant (di derivazione COM/OLE Automation) scambiati tra client e controller.
