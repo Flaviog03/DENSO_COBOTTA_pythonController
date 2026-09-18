@@ -35,7 +35,7 @@ import pybcapclient.bcapclient as bcapclient
 # --- Parametri di connessione ---
 # Simulazione VRC:  host = "127.0.0.1"
 # Robot reale:      host = "<IP del controller>", es. "192.168.0.1"
-host = "192.168.0.1"   # <-- sostituisci con l'IP reale del tuo controller
+host = "192.168.1.15"   # <-- sostituisci con l'IP reale del tuo controller
 port = 5007              # porta di default del server b-CAP (NON quella OPC-UA)
 timeout = 2000
 

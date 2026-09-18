@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "comando": {
+      "type": "string",
+      "enum": ["TRASLA", "RUOTA", "AFFERRA", "RILASCIA"]
+    },
+    "direzione": {
+      "type": "string",
+      "enum": ""
+    },
+    "moltiplicatore": {
+       "type": "integer",
+       "description": "Indica di quante unità di base (es. 50mm) deve essere moltiplicato il comando se l'utente richiede grandi spostamenti."
+    }
+  },
+  "required": ["comando"],
+  "additionalProperties": false
+}

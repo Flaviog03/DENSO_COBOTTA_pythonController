@@ -8,7 +8,6 @@ class VoiceProcessorError(Exception):
         self.message = message
         super().__init__(self.message)
 
-
 class VoiceProcessor:
     def __init__(self, model_size="turbo"):
         print("Caricamento del modello AI vocale...")
@@ -29,7 +28,7 @@ class VoiceProcessor:
             f.write(audio.get_wav_data())
 
         print("Trascrizione in corso...")
-        segments, _ = self.model.transcribe(temp_file, language="it")
+        segments, _ = self.model.transcribe(temp_file, language="it", vad_filter=True, vad_parameters=dict(min_silence_duration_ms=500))
         testo = " ".join([segment.text for segment in segments]).strip()
         
         # Pulizia del file temporaneo
