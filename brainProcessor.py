@@ -2,9 +2,11 @@ import os
 import json
 from AI.ai_transformer import AITransformer, AITransformerError
 from AI import ai_utilities
+from dotenv import load_dotenv
+from densoController import DirectionMap, RobotAction
 
 class BrainProcessor:
-    def __init__(self, actions, directions, schema_name="comando_robotico"):
+    def __init__(self, actions, directions, responseSchemaName):
         # L'inizializzazione legge automaticamente le variabili d'ambiente[cite: 1]
         try:
             self.ai = AITransformer()
@@ -13,8 +15,12 @@ class BrainProcessor:
             raise
             
         # Carichiamo lo schema strutturato dalla cartella schemas/
-        self.schema = ai_utilities.getSchema(schema_name)
-        
+        self.schema = ai_utilities.getSchema(responseSchemaName)
+
+        # Inietto le azioni e le direzioni nello schema
+        self.schema["properties"]["comando"]["enum"] = actions
+        self.schema["properties"]["direzione"]["enum"] = directions
+
         # Il System Prompt che istruisce il modello sulle azioni consentite
         self.system_prompt = f"""
                 Sei il traduttore logico di un braccio robotico DENSO.
@@ -49,14 +55,11 @@ class BrainProcessor:
 
         if self.ai.modello is None:
             raise AITransformerError("Il modello Ai non è stato caricato correttamente")
-
-        # Prima trovo lo schema di risposta
-        
         
         # Generiamo il dizionario payload formattato con i ruoli system e user
         payload = ai_utilities.getPayload(
             prompt=self.system_prompt,
-            schema=self.schema,
+            responseSchema=self.schema,
             params=user_text,
             model=self.ai.modello,
             schemaName="conversioneTestuale"
@@ -64,7 +67,7 @@ class BrainProcessor:
         
         try:
             # Inviamo la request HTTP a LM Studio
-            risposta = self.ai.askAI(prompt=self.system_prompt, payload=json.dumps(payload))
+            risposta = self.ai.askAI(payload=json.dumps(payload))
             
             # Poiché LM Studio restituisce un JSON in formato OpenAI-compatibile,
             # il contenuto vero e proprio si trova dentro la lista 'choices'
@@ -80,3 +83,7 @@ class BrainProcessor:
         except (KeyError, json.JSONDecodeError) as e:
             print(f"Errore nella decodifica della risposta di LM Studio: {e}")
             return None
+
+if __name__ == "__main__":
+    load_dotenv()
+    cervello = BrainProcessor(actions=RobotAction.get_allowed_actions(), directions=DirectionMap.get_allowed_directions(), responseSchemaName="Prova")

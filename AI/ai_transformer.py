@@ -18,7 +18,7 @@ class AITransformer:
         if not self.modello:
             raise AITransformerError("Errore: il modello per l'AI scelto è sbagliato")
 
-    def askAI(self, prompt:str, payload:str):
+    def askAI(self, payload:str):
         """Invia una request ad un'AI locale e ritorna il risultato in JSON"""
 
         if self.llm_url is None:

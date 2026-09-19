@@ -3,7 +3,7 @@
   "properties": {
     "comando": {
       "type": "string",
-      "enum": ["TRASLA", "RUOTA", "AFFERRA", "RILASCIA"]
+      "enum": ""
     },
     "direzione": {
       "type": "string",

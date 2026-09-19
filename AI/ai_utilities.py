@@ -1,12 +1,12 @@
 import json
 
 def getSchema(schema_name:str )-> dict:
-    """Carica uno schema JSON da un file dalla cartella ./schemas"""
+    """Carica uno schema JSON da un file dalla cartella ./schemas | !!! Inserire il nome dello schema senza l'estensione .json"""
     path = f"schemas/{schema_name}.json"
     with open(path, 'r') as f:
         return json.load(f)
 
-def getPayload(prompt:str, schema:dict, params:str, model:str, schemaName:str):
+def getPayload(prompt:str, responseSchema:dict, params:str, model:str, schemaName:str):
     return {
         "model": model, 
         "messages": [
@@ -24,7 +24,7 @@ def getPayload(prompt:str, schema:dict, params:str, model:str, schemaName:str):
             "type": "json_schema",
             "json_schema": {
                 "name": schemaName,
-                "schema": schema
+                "schema": responseSchema
             }
         }
     }
